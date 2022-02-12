@@ -14,6 +14,9 @@ type Withdrawal struct {
 }
 
 func (w Withdrawal) Execute(
+	//
+	// Facilitate the process of doing a cash withdrawal.
+	//
 	atmID string, cardNumber string, pin int, amount float64) {
 
 	card, err := w.CardRepo.GetByNumber(cardNumber)
@@ -33,16 +36,16 @@ func (w Withdrawal) Execute(
 
 	log.Println("Approved.")
 
+	card.Account.DeductBalance(amount)
 	if charges := w.Transaction.CalculateCharges(&machine, &card); charges > 0 {
 		log.Printf("Withdrawal charges of %f apply.", charges)
 		card.Account.DeductBalance(charges)
 	}
-
-	card.Account.DeductBalance(amount)
-	machine.DeductFunds(amount)
-
 	log.Printf("Remaining balance: %f.", card.Account.GetBalance())
 
+	machine.DeductFunds(amount)
+
+	// TODO: Build a layer to persist these together.
 	w.MachineRepo.Update(&machine)
 	w.CardRepo.Update(&card)
 }
