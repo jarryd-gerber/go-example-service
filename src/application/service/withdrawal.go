@@ -14,11 +14,10 @@ type Withdrawal struct {
 }
 
 func (w Withdrawal) Execute(
+	atmID string, cardNumber string, pin int, amount float64) {
 	//
 	// Facilitate the process of doing a cash withdrawal.
 	//
-	atmID string, cardNumber string, pin int, amount float64) {
-
 	card, err := w.CardRepo.GetByNumber(cardNumber)
 	if err != nil {
 		log.Fatal(err)
