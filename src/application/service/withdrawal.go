@@ -26,19 +26,23 @@ func (w Withdrawal) Execute(
 		log.Fatal(err)
 	}
 
-	if err := w.Transaction.Approve(&machine, &card, pin, amount); err != nil {
-		log.Fatal(err.Error())
+	_, err = w.Transaction.Approve(&machine, &card, pin, amount)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	log.Println("Withdrawal approved")
-
-	w.MachineRepo.AdjustFunds(&machine, amount)
-	w.CardRepo.DeductAccountBalance(&card, amount)
+	log.Println("Approved.")
 
 	if charges := w.Transaction.CalculateCharges(&machine, &card); charges > 0 {
-		log.Printf("Withdrawal charges of %f apply", charges)
-		w.CardRepo.DeductAccountBalance(&card, charges)
+		log.Printf("Withdrawal charges of %f apply.", charges)
+		card.Account.DeductBalance(charges)
 	}
 
-	log.Printf("Remaining balance: %f", card.Account.GetBalance())
+	card.Account.DeductBalance(amount)
+	machine.DeductFunds(amount)
+
+	log.Printf("Remaining balance: %f.", card.Account.GetBalance())
+
+	w.MachineRepo.Update(&machine)
+	w.CardRepo.Update(&card)
 }

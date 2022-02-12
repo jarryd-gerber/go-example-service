@@ -23,8 +23,7 @@ func (repo Machine) GetByID(id string) (entity.Machine, error) {
 	return machine, nil
 }
 
-func (repo Machine) AdjustFunds(machine *entity.Machine, amount float64) {
+func (repo Machine) Update(machine *entity.Machine) {
 	// Adjust an Machine available funds by any amount.
-	machine.DeductFunds(amount)
 	repo.DB.Save(machine)
 }

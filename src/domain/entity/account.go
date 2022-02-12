@@ -10,7 +10,7 @@ func (acc *Account) HasSufficientFunds(amount float64) bool {
 	return (acc.Balance - amount) >= 0
 }
 
-func (acc *Account) ReduceBalance(amount float64) {
+func (acc *Account) DeductBalance(amount float64) {
 	acc.Balance -= amount
 }
 

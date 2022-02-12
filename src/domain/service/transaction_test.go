@@ -15,7 +15,7 @@ func TestApproveWrongPin(t *testing.T) {
 
 	transaction := service.Transaction{}
 
-	got := transaction.Approve(&machine, &card, pin, amount)
+	_, got := transaction.Approve(&machine, &card, pin, amount)
 	expected := "incorrect pin"
 
 	if got == nil {
@@ -37,8 +37,7 @@ func TestApproveInsufficientFunds(t *testing.T) {
 
 	transaction := service.Transaction{}
 
-	//expected := "cannot meet demand"
-	got := transaction.Approve(&machine, &card, pin, amount)
+	_, got := transaction.Approve(&machine, &card, pin, amount)
 	expected := "insufficient funds"
 
 	if got == nil {
@@ -60,8 +59,7 @@ func TestApproveCannotMeetDemand(t *testing.T) {
 
 	transaction := service.Transaction{}
 
-	//expected := "cannot meet demand"
-	got := transaction.Approve(&machine, &card, pin, amount)
+	_, got := transaction.Approve(&machine, &card, pin, amount)
 	expected := "cannot meet demand"
 
 	if got == nil {

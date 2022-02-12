@@ -24,8 +24,7 @@ func (repo Card) GetByNumber(number string) (entity.Card, error) {
 	return card, nil
 }
 
-func (repo Card) DeductAccountBalance(card *entity.Card, amount float64) {
+func (repo Card) Update(card *entity.Card) {
 	// Deduct from the balance of the Account to which a Card belongs.
-	card.Account.ReduceBalance(amount)
 	repo.DB.Save(card.Account)
 }
