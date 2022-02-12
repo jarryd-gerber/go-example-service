@@ -6,8 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitATMRepo(database *gorm.DB) repository.ATM {
-	return repository.ATM{DB: database}
+func InitATMRepo(database *gorm.DB) repository.Machine {
+	return repository.Machine{DB: database}
 }
 
 func InitCardRepo(database *gorm.DB) repository.Card {

@@ -11,11 +11,11 @@ func TestApproveWrongPin(t *testing.T) {
 	pin := 4321
 	amount := 100.00
 	card := entity.Card{Pin: 1234}
-	atm := entity.ATM{}
+	machine := entity.Machine{}
 
 	transaction := service.Transaction{}
 
-	got := transaction.Approve(&atm, &card, pin, amount)
+	got := transaction.Approve(&machine, &card, pin, amount)
 	expected := "incorrect pin"
 
 	if got == nil {
@@ -33,12 +33,12 @@ func TestApproveInsufficientFunds(t *testing.T) {
 	amount := 200.00
 
 	card := entity.Card{Pin: 1234, Account: entity.Account{Balance: 100.00}}
-	atm := entity.ATM{}
+	machine := entity.Machine{}
 
 	transaction := service.Transaction{}
 
 	//expected := "cannot meet demand"
-	got := transaction.Approve(&atm, &card, pin, amount)
+	got := transaction.Approve(&machine, &card, pin, amount)
 	expected := "insufficient funds"
 
 	if got == nil {
@@ -56,12 +56,12 @@ func TestApproveCannotMeetDemand(t *testing.T) {
 	amount := 100.00
 
 	card := entity.Card{Pin: 1234, Account: entity.Account{Balance: 100.00}}
-	atm := entity.ATM{Funds: 50.00}
+	machine := entity.Machine{Funds: 50.00}
 
 	transaction := service.Transaction{}
 
 	//expected := "cannot meet demand"
-	got := transaction.Approve(&atm, &card, pin, amount)
+	got := transaction.Approve(&machine, &card, pin, amount)
 	expected := "cannot meet demand"
 
 	if got == nil {
@@ -77,9 +77,9 @@ func TestApproveCannotMeetDemand(t *testing.T) {
 func TestCalculateChargesDifferentBank(t *testing.T) {
 	expected := 3.50
 	card := entity.Card{Bank: "lloyds"}
-	atm := entity.ATM{Bank: "halifax"}
+	machine := entity.Machine{Bank: "halifax"}
 
-	got := service.Transaction{}.CalculateCharges(&atm, &card)
+	got := service.Transaction{}.CalculateCharges(&machine, &card)
 
 	if got != expected {
 		t.Errorf(
@@ -93,9 +93,9 @@ func TestCalculateChargesDifferentBank(t *testing.T) {
 func TestCalculateChargesSameBank(t *testing.T) {
 	expected := 0.00
 	card := entity.Card{Bank: "lloyds"}
-	atm := entity.ATM{Bank: "lloyds"}
+	machine := entity.Machine{Bank: "lloyds"}
 
-	got := service.Transaction{}.CalculateCharges(&atm, &card)
+	got := service.Transaction{}.CalculateCharges(&machine, &card)
 
 	if got != expected {
 		t.Errorf(

@@ -6,5 +6,5 @@ import (
 )
 
 func MigrateSchemas(db *gorm.DB) {
-	db.AutoMigrate(&entity.Account{}, &entity.ATM{}, &entity.Card{})
+	db.AutoMigrate(&entity.Account{}, &entity.Machine{}, &entity.Card{})
 }

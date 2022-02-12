@@ -9,7 +9,7 @@ import (
 type Transaction struct{}
 
 func (t Transaction) Approve(
-	atm *entity.ATM, card *entity.Card, pin int, amount float64) error {
+	machine *entity.Machine, card *entity.Card, pin int, amount float64) error {
 	//
 	// Ensure requirements are met for Trasaction to take place.
 	//
@@ -17,7 +17,7 @@ func (t Transaction) Approve(
 		return errors.New("incorrect pin")
 	} else if !card.Account.HasSufficientFunds(amount) {
 		return errors.New("insufficient funds")
-	} else if !atm.MeetDemand(amount) {
+	} else if !machine.MeetDemand(amount) {
 		return errors.New("cannot meet demand")
 	}
 
@@ -25,11 +25,11 @@ func (t Transaction) Approve(
 }
 
 func (t Transaction) CalculateCharges(
-	atm *entity.ATM, card *entity.Card) float64 {
+	machine *entity.Machine, card *entity.Card) float64 {
 	//
 	// Calculate whether Transaction fees apply.
 	//
-	if card.GetBank() != atm.Bank {
+	if card.GetBank() != machine.Bank {
 		return 3.50
 	}
 
