@@ -9,7 +9,7 @@ import (
 
 type Withdrawal struct {
 	CardRepo    repository.Card
-	ATMRepo     repository.Machine
+	MachineRepo repository.Machine
 	Transaction service.Transaction
 }
 
@@ -21,7 +21,7 @@ func (w Withdrawal) Execute(
 		log.Fatal(err)
 	}
 
-	machine, err := w.ATMRepo.GetByID(atmID)
+	machine, err := w.MachineRepo.GetByID(atmID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,7 +32,7 @@ func (w Withdrawal) Execute(
 
 	log.Println("Withdrawal approved")
 
-	w.ATMRepo.AdjustFunds(&machine, amount)
+	w.MachineRepo.AdjustFunds(&machine, amount)
 	w.CardRepo.DeductAccountBalance(&card, amount)
 
 	if charges := w.Transaction.CalculateCharges(&machine, &card); charges > 0 {

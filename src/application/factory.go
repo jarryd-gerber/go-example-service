@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitATMRepo(database *gorm.DB) repository.Machine {
+func InitMachineRepo(database *gorm.DB) repository.Machine {
 	return repository.Machine{DB: database}
 }
 
@@ -16,7 +16,7 @@ func InitCardRepo(database *gorm.DB) repository.Card {
 
 func InitWithdrawal(database *gorm.DB) service.Withdrawal {
 	return service.Withdrawal{
-		CardRepo: InitCardRepo(database),
-		ATMRepo:  InitATMRepo(database),
+		CardRepo:    InitCardRepo(database),
+		MachineRepo: InitMachineRepo(database),
 	}
 }
