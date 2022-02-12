@@ -24,6 +24,6 @@ func (repo Machine) GetByID(id string) (entity.Machine, error) {
 }
 
 func (repo Machine) Update(machine *entity.Machine) {
-	// Adjust an Machine available funds by any amount.
+	// Update all values on a Machine entity.
 	repo.DB.Save(machine)
 }
