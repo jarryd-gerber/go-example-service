@@ -1,7 +1,6 @@
 package infrastructure
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -12,8 +11,7 @@ import (
 
 func InitDB() gorm.DB {
 	rootPath, _ := os.Getwd()
-	filePath := filepath.Join(rootPath, "../storage/machine.db")
-	fmt.Print(filePath)
+	filePath := filepath.Join(rootPath, "../storage/atm.db")
 	db, err := gorm.Open(sqlite.Open(filePath), &gorm.Config{})
 
 	if err != nil {
