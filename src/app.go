@@ -12,8 +12,8 @@ func main() {
 	amount := 1000.00
 
 	db := infrastructure.InitDB()
-	infrastructure.MigrateSchemas(&db)
+	infrastructure.MigrateSchemas(db)
 
-	withdrawal := application.InitWithdrawal(&db)
+	withdrawal := application.InitWithdrawal(db)
 	withdrawal.Execute(atmID, cardNumber, pin, amount)
 }

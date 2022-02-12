@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitDB() gorm.DB {
+func InitDB() *gorm.DB {
 	rootPath, _ := os.Getwd()
 	filePath := filepath.Join(rootPath, "../storage/atm.db")
 
@@ -19,7 +19,7 @@ func InitDB() gorm.DB {
 		log.Fatal("could not initialise database connection")
 	}
 
-	return *db
+	return db
 }
 
 func InitTestDB() *gorm.DB {
