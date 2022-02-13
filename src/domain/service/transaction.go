@@ -1,7 +1,7 @@
 package service
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/jarryd-gerber/go-example-service/src/domain/entity"
 )
@@ -10,23 +10,15 @@ type Transaction struct{}
 
 const WithdrawalCharge float64 = 3.50
 
-func (t Transaction) Approve(
-	machine *entity.Machine, card *entity.Card, pin int, amount float64) (bool, error) {
-	//
-	// Ensure requirements are met for Trasaction to take place.
-	//
-	if !card.VerifyPin(pin) {
-		return false, errors.New("incorrect pin")
-	} else if !card.Account.HasSufficientFunds(amount) {
-		return false, errors.New("insufficient funds")
-	} else if !machine.MeetDemand(amount) {
-		return false, errors.New("cannot meet demand")
+func (t Transaction) buildReceipt(amount, charges, balance float64) *entity.Receipt {
+	return &entity.Receipt{
+		Amount:  amount,
+		Charges: charges,
+		Balance: balance,
 	}
-
-	return true, nil
 }
 
-func (t Transaction) CalculateCharges(
+func (t Transaction) calculateCharges(
 	machine *entity.Machine, card *entity.Card) float64 {
 	//
 	// Calculate whether Transaction fees apply.
@@ -36,4 +28,24 @@ func (t Transaction) CalculateCharges(
 	}
 
 	return 0.00
+}
+
+func (t Transaction) Attempt(machine *entity.Machine, card *entity.Card, pin int, amount float64) (*entity.Receipt, error) {
+
+	charges := t.calculateCharges(machine, card)
+	amount += charges
+
+	if _, err := card.VerifyPin(pin); err != nil {
+		return nil, fmt.Errorf("%w", err)
+	}
+
+	if _, err := machine.DeductFunds(amount); err != nil {
+		return nil, fmt.Errorf("%w", err)
+	}
+
+	if _, err := card.Account.DeductBalance(amount); err != nil {
+		return nil, fmt.Errorf("%w", err)
+	}
+
+	return t.buildReceipt(amount, charges, card.Account.Balance), nil
 }

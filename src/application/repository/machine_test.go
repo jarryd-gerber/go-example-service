@@ -14,7 +14,6 @@ func TestGetByID(t *testing.T) {
 
 	repo := application.InitMachineRepo(db)
 	machine, err := repo.GetByID("lloyds777")
-
 	if err != nil {
 		t.Fatal(err)
 	}

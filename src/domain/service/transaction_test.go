@@ -15,7 +15,7 @@ func TestApproveWrongPin(t *testing.T) {
 
 	transaction := service.Transaction{}
 
-	_, got := transaction.Approve(&machine, &card, pin, amount)
+	_, got := transaction.Attempt(&machine, &card, pin, amount)
 	expected := "incorrect pin"
 
 	if got == nil {
@@ -28,7 +28,7 @@ func TestApproveWrongPin(t *testing.T) {
 	}
 }
 
-func TestApproveInsufficientFunds(t *testing.T) {
+func TestAttemptInsufficientFunds(t *testing.T) {
 	pin := 1234
 	amount := 200.00
 
@@ -37,7 +37,7 @@ func TestApproveInsufficientFunds(t *testing.T) {
 
 	transaction := service.Transaction{}
 
-	_, got := transaction.Approve(&machine, &card, pin, amount)
+	_, got := transaction.Attempt(&machine, &card, pin, amount)
 	expected := "insufficient funds"
 
 	if got == nil {
@@ -50,7 +50,7 @@ func TestApproveInsufficientFunds(t *testing.T) {
 	}
 }
 
-func TestApproveCannotMeetDemand(t *testing.T) {
+func TestAttemptCannotMeetDemand(t *testing.T) {
 	pin := 1234
 	amount := 100.00
 
@@ -59,11 +59,11 @@ func TestApproveCannotMeetDemand(t *testing.T) {
 
 	transaction := service.Transaction{}
 
-	_, got := transaction.Approve(&machine, &card, pin, amount)
+	_, got := transaction.Attempt(&machine, &card, pin, amount)
 	expected := "cannot meet demand"
 
 	if got == nil {
-		t.Error("Unexpected result")
+		t.Fatal("Unexpected result")
 	} else if got.Error() != expected {
 		t.Errorf(
 			"Did not get expected result. Got: '%v', expected: '%v'",
@@ -72,33 +72,47 @@ func TestApproveCannotMeetDemand(t *testing.T) {
 	}
 }
 
-func TestCalculateChargesDifferentBank(t *testing.T) {
-	expected := 3.50
-	card := entity.Card{Bank: "lloyds"}
-	machine := entity.Machine{Bank: "halifax"}
+func TestAttemptCharges(t *testing.T) {
+	pin := 1234
+	amount := 50.00
+	expected := 46.50
+	card := entity.Card{Pin: 1234, Bank: "lloyds",
+		Account: entity.Account{Balance: 100.00}}
+	machine := entity.Machine{Funds: 5000.00, Bank: "halifax"}
 
-	got := service.Transaction{}.CalculateCharges(&machine, &card)
+	transaction := service.Transaction{}
+	_, err := transaction.Attempt(&machine, &card, pin, amount)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	if got != expected {
+	if card.Account.Balance != expected {
 		t.Errorf(
 			"Did not get expected result. Got: '%v', expected: '%v'",
-			got,
+			card.Account.Balance,
 			expected)
 	}
 
 }
 
-func TestCalculateChargesSameBank(t *testing.T) {
-	expected := 0.00
-	card := entity.Card{Bank: "lloyds"}
-	machine := entity.Machine{Bank: "lloyds"}
+func TestAttemptNoCharges(t *testing.T) {
+	pin := 1234
+	amount := 50.00
+	expected := 50.00
+	card := entity.Card{Pin: 1234, Bank: "lloyds",
+		Account: entity.Account{Balance: 100.00}}
+	machine := entity.Machine{Funds: 5000.00, Bank: "lloyds"}
 
-	got := service.Transaction{}.CalculateCharges(&machine, &card)
+	transaction := service.Transaction{}
+	_, err := transaction.Attempt(&machine, &card, pin, amount)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	if got != expected {
+	if card.Account.Balance != expected {
 		t.Errorf(
 			"Did not get expected result. Got: '%v', expected: '%v'",
-			got,
+			card.Account.Balance,
 			expected)
 	}
 }

@@ -12,8 +12,12 @@ func main() {
 	pin := 1234
 	amount := 1000.00
 
-	if err := application.InitWithdrawal().Execute(
-		atmID, cardNumber, pin, amount); err != nil {
-		log.Println(err)
+	receipt, err := application.InitWithdrawal().Execute(atmID, cardNumber, pin, amount)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	log.Printf("Amount withdrawn: £%.2f", receipt.Amount)
+	log.Printf("Withdrawal charges of £%.2f applies", receipt.Charges)
+	log.Printf("Available balance: £%.2f", receipt.Balance)
 }

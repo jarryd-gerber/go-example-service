@@ -1,5 +1,7 @@
 package entity
 
+import "errors"
+
 type Card struct {
 	ID        string `gorm:"primaryKey"`
 	Bank      string
@@ -9,6 +11,10 @@ type Card struct {
 	Account   Account
 }
 
-func (c Card) VerifyPin(pin int) bool {
-	return c.Pin == pin
+func (c Card) VerifyPin(pin int) (bool, error) {
+	if c.Pin != pin {
+		return false, errors.New("invalid pin")
+	}
+
+	return true, nil
 }

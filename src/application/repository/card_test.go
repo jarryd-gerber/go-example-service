@@ -13,8 +13,8 @@ func TestGetByNumber(t *testing.T) {
 	db.Save(entity.Card{ID: "card0001", Number: "0123456789"})
 
 	repo := application.InitCardRepo(db)
-	machine, err := repo.GetByNumber("0123456789")
 
+	machine, err := repo.GetByNumber("0123456789")
 	if err != nil {
 		t.Fatal(err)
 	}
