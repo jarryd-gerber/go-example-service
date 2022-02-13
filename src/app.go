@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/jarryd-gerber/go-example-service/src/application"
 	"github.com/jarryd-gerber/go-example-service/src/infrastructure"
 )
@@ -15,5 +17,9 @@ func main() {
 	infrastructure.MigrateSchemas(db)
 
 	withdrawal := application.InitWithdrawal(db)
-	withdrawal.Execute(atmID, cardNumber, pin, amount)
+	err := withdrawal.Execute(atmID, cardNumber, pin, amount)
+
+	if err != nil {
+		log.Print(err)
+	}
 }
