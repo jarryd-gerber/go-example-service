@@ -13,11 +13,3 @@ func (acc *Account) HasSufficientFunds(amount float64) bool {
 func (acc *Account) DeductBalance(amount float64) {
 	acc.Balance -= amount
 }
-
-func (acc *Account) GetAccountNumber() string {
-	return acc.AccountNumber
-}
-
-func (acc *Account) GetBalance() float64 {
-	return acc.Balance
-}

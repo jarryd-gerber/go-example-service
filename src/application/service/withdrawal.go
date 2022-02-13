@@ -43,11 +43,13 @@ func (w Withdrawal) Execute(
 			card.Account.DeductBalance(charges)
 		}
 
-		log.Printf("Remaining balance: %f.", card.Account.GetBalance())
+		log.Printf("Remaining balance: £%.2f.", card.Account.Balance)
 
 		machine.DeductFunds(amount)
 		w.MachineRepo.Update(&machine)
 		w.CardRepo.Update(&card)
+	} else {
+		log.Print("Something unexpected happened.")
 	}
 
 	return nil

@@ -31,7 +31,7 @@ func (t Transaction) CalculateCharges(
 	//
 	// Calculate whether Transaction fees apply.
 	//
-	if card.GetBank() != machine.Bank {
+	if card.Bank != machine.Bank {
 		return WithdrawalCharge
 	}
 

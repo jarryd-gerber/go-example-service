@@ -12,15 +12,3 @@ type Card struct {
 func (c Card) VerifyPin(pin int) bool {
 	return c.Pin == pin
 }
-
-func (c Card) GetBank() string {
-	return c.Bank
-}
-
-func (c Card) GetCardNumber() string {
-	return c.Number
-}
-
-func (c Card) GetAccount() Account {
-	return c.Account
-}
