@@ -21,7 +21,7 @@ func (w Withdrawal) persist(machine *entity.Machine, card *entity.Card) {
 }
 
 func (w Withdrawal) Make(
-	atmID string,
+	machineID string,
 	cardNumber string,
 	pin int,
 	amount float64,
@@ -32,7 +32,7 @@ func (w Withdrawal) Make(
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	machine, err := w.MachineRepo.GetByID(atmID)
+	machine, err := w.MachineRepo.GetByID(machineID)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
