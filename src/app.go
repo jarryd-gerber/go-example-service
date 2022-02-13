@@ -12,7 +12,7 @@ func main() {
 	pin := 1234
 	amount := 1000.00
 
-	receipt, err := application.InitWithdrawal().Execute(atmID, cardNumber, pin, amount)
+	receipt, err := application.InitWithdrawal().Make(atmID, cardNumber, pin, amount)
 	if err != nil {
 		log.Fatal(err)
 	}

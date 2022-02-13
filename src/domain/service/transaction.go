@@ -9,7 +9,7 @@ import (
 
 type Transaction struct{}
 
-const WithdrawalCharge float64 = 3.50
+const BankCharge float64 = 3.50
 
 func (t Transaction) buildReceipt(amount, charges, balance float64) *valueobject.Receipt {
 	return &valueobject.Receipt{
@@ -19,13 +19,9 @@ func (t Transaction) buildReceipt(amount, charges, balance float64) *valueobject
 	}
 }
 
-func (t Transaction) calculateCharges(
-	machine *entity.Machine, card *entity.Card) float64 {
-	//
-	// Calculate whether Transaction fees apply.
-	//
+func (t Transaction) calculateCharges(machine *entity.Machine, card *entity.Card) float64 {
 	if card.Bank != machine.Bank {
-		return WithdrawalCharge
+		return BankCharge
 	}
 
 	return 0.00
