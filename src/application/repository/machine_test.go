@@ -9,16 +9,21 @@ import (
 )
 
 func TestGetByID(t *testing.T) {
-	db := infrastructure.InitTestDB()
-	db.Save(entity.Machine{ID: "lloyds777", Bank: "lloyds"})
+	expected := "lloyds"
 
+	db := infrastructure.InitTestDB()
+	db.Save(entity.Machine{ID: "lloyds777", Bank: expected})
 	repo := application.InitMachineRepo(db)
-	machine, err := repo.GetByID("lloyds777")
+
+	got, err := repo.GetByID("lloyds777")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if machine.Bank != "lloyds" {
-		t.Error("Not correct machine")
+	if got.Bank != expected {
+		t.Errorf(
+			"Did not get expected result. Got: '%v', expected: '%v'",
+			got,
+			expected)
 	}
 }
