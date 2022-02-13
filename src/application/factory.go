@@ -3,6 +3,7 @@ package application
 import (
 	"github.com/jarryd-gerber/go-example-service/src/application/repository"
 	"github.com/jarryd-gerber/go-example-service/src/application/service"
+	"github.com/jarryd-gerber/go-example-service/src/infrastructure"
 	"gorm.io/gorm"
 )
 
@@ -14,9 +15,11 @@ func InitCardRepo(database *gorm.DB) repository.Card {
 	return repository.Card{DB: database}
 }
 
-func InitWithdrawal(database *gorm.DB) service.Withdrawal {
+func InitWithdrawal() service.Withdrawal {
+	db := infrastructure.InitDB()
+
 	return service.Withdrawal{
-		CardRepo:    InitCardRepo(database),
-		MachineRepo: InitMachineRepo(database),
+		CardRepo:    InitCardRepo(db),
+		MachineRepo: InitMachineRepo(db),
 	}
 }

@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/jarryd-gerber/go-example-service/src/application"
-	"github.com/jarryd-gerber/go-example-service/src/infrastructure"
 )
 
 func main() {
@@ -13,13 +12,8 @@ func main() {
 	pin := 1234
 	amount := 1000.00
 
-	db := infrastructure.InitDB()
-	infrastructure.MigrateSchemas(db)
-
-	withdrawal := application.InitWithdrawal(db)
-	err := withdrawal.Execute(atmID, cardNumber, pin, amount)
-
-	if err != nil {
-		log.Print(err)
+	if err := application.InitWithdrawal().Execute(
+		atmID, cardNumber, pin, amount); err != nil {
+		log.Println(err)
 	}
 }
