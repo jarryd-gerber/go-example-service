@@ -13,7 +13,7 @@ type Card struct {
 
 func (c Card) VerifyPin(pin int) (bool, error) {
 	if c.Pin != pin {
-		return false, errors.New("invalid pin")
+		return false, errors.New("incorrect pin")
 	}
 
 	return true, nil

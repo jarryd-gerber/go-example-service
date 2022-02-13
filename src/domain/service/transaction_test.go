@@ -33,7 +33,7 @@ func TestAttemptInsufficientFunds(t *testing.T) {
 	amount := 200.00
 
 	card := entity.Card{Pin: 1234, Account: entity.Account{Balance: 100.00}}
-	machine := entity.Machine{}
+	machine := entity.Machine{Funds: 1000.00}
 
 	transaction := service.Transaction{}
 
