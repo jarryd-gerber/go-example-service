@@ -6,19 +6,6 @@ import (
 	"github.com/jarryd-gerber/go-example-service/src/domain/entity"
 )
 
-func TestHasSufficientFunds(t *testing.T) {
-	expected := true
-
-	acc := entity.Account{Balance: 100.00}
-
-	if got := acc.HasSufficientFunds(100.00); got != expected {
-		t.Errorf(
-			"Did not get expected result. Got: '%v', expected: '%v'",
-			got,
-			expected)
-	}
-}
-
 func TestDeductBalance(t *testing.T) {
 	expected := 0.00
 

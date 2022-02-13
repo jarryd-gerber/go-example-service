@@ -6,19 +6,6 @@ import (
 	"github.com/jarryd-gerber/go-example-service/src/domain/entity"
 )
 
-func TestMeetDemand(t *testing.T) {
-	expected := true
-
-	machine := entity.Machine{Funds: 1000.00}
-
-	if got := machine.MeetDemand(500.00); got != expected {
-		t.Errorf(
-			"Did not get expected result. Got: '%v', expected: '%v'",
-			got,
-			expected)
-	}
-}
-
 func TestDeductFunds(t *testing.T) {
 	expected := 900.00
 

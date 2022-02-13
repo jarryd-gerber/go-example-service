@@ -8,10 +8,6 @@ type Account struct {
 	Balance       float64
 }
 
-func (acc *Account) HasSufficientFunds(amount float64) bool {
-	return (acc.Balance - amount) >= 0
-}
-
 func (acc *Account) DeductBalance(amount float64) (bool, error) {
 	// Deduct an amount from Account balance
 	if amount > acc.Balance {

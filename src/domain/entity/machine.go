@@ -8,10 +8,6 @@ type Machine struct {
 	Bank  string
 }
 
-func (m *Machine) MeetDemand(amount float64) bool {
-	return (m.Funds - amount) >= 0
-}
-
 func (m *Machine) DeductFunds(amount float64) (bool, error) {
 	if amount > m.Funds {
 		return false, errors.New("cannot meet demand")
