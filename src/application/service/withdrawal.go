@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/jarryd-gerber/go-example-service/src/application/repository"
-	"github.com/jarryd-gerber/go-example-service/src/domain/entity"
 	"github.com/jarryd-gerber/go-example-service/src/domain/service"
+	"github.com/jarryd-gerber/go-example-service/src/domain/valueobject"
 )
 
 type Withdrawal struct {
@@ -15,7 +15,7 @@ type Withdrawal struct {
 }
 
 func (w Withdrawal) Execute(
-	atmID string, cardNumber string, pin int, amount float64) (*entity.Receipt, error) {
+	atmID string, cardNumber string, pin int, amount float64) (*valueobject.Receipt, error) {
 	//
 	// Facilitate the process of doing a cash withdrawal.
 	//

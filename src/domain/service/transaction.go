@@ -4,14 +4,15 @@ import (
 	"fmt"
 
 	"github.com/jarryd-gerber/go-example-service/src/domain/entity"
+	"github.com/jarryd-gerber/go-example-service/src/domain/valueobject"
 )
 
 type Transaction struct{}
 
 const WithdrawalCharge float64 = 3.50
 
-func (t Transaction) buildReceipt(amount, charges, balance float64) *entity.Receipt {
-	return &entity.Receipt{
+func (t Transaction) buildReceipt(amount, charges, balance float64) *valueobject.Receipt {
+	return &valueobject.Receipt{
 		Amount:  amount,
 		Charges: charges,
 		Balance: balance,
@@ -30,7 +31,7 @@ func (t Transaction) calculateCharges(
 	return 0.00
 }
 
-func (t Transaction) Attempt(machine *entity.Machine, card *entity.Card, pin int, amount float64) (*entity.Receipt, error) {
+func (t Transaction) Attempt(machine *entity.Machine, card *entity.Card, pin int, amount float64) (*valueobject.Receipt, error) {
 
 	charges := t.calculateCharges(machine, card)
 	amount += charges

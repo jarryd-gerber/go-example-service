@@ -1,4 +1,4 @@
-package entity
+package valueobject
 
 type Receipt struct {
 	Amount  float64
