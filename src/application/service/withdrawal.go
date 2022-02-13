@@ -16,8 +16,10 @@ type Withdrawal struct {
 }
 
 func (w Withdrawal) persist(machine *entity.Machine, card *entity.Card) {
-	w.MachineRepo.Update(machine)
-	w.CardRepo.Update(card)
+	tx := w.MachineRepo.DB.Begin()
+	tx.Save(machine)
+	tx.Save(card.Account)
+	tx.Commit()
 }
 
 func (w Withdrawal) Make(
