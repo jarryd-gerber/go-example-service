@@ -42,13 +42,14 @@ func (t Transaction) Attempt(
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	if _, err := machine.DeductFunds(amount); err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-
 	if _, err := card.Account.DeductBalance(amount); err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	return t.buildReceipt(amount, charges, card.Account.Balance), nil
+	if _, err := machine.DeductFunds(amount); err != nil {
+		return nil, fmt.Errorf("%w", err)
+	}
+
+	return t.buildReceipt(
+		amount, charges, card.Account.Balance), nil
 }

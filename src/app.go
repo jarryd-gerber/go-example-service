@@ -9,15 +9,15 @@ import (
 )
 
 func main() {
-	request := valueobject.Request{
+	db := infrastructure.InitDB()
+
+	receipt, err := application.InitWithdrawal(db).Make(valueobject.Request{
 		MachineID:  "lloyds777",
 		CardNumber: "0123456789",
 		Pin:        1234,
 		Amount:     1000.00,
-	}
+	})
 
-	receipt, err := application.InitWithdrawal(infrastructure.InitDB()).Make(
-		request.MachineID, request.CardNumber, request.Pin, request.Amount)
 	if err != nil {
 		log.Fatal(err)
 	}

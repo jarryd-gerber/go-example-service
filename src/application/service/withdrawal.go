@@ -25,29 +25,23 @@ func (w Withdrawal) persist(machine *entity.Machine, card *entity.Card) {
 	tx.Commit()
 }
 
-func (w Withdrawal) Make(
-	machineID string,
-	cardNumber string,
-	pin int,
-	amount float64,
-) (*valueobject.Receipt, error) {
+func (w Withdrawal) Make(request valueobject.Request) (*valueobject.Receipt, error) {
 	// Make a withdrawal and persist on success.
-	card, err := w.CardRepo.GetByNumber(cardNumber)
+	machine, err := w.MachineRepo.GetByID(request.MachineID)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	machine, err := w.MachineRepo.GetByID(machineID)
+	card, err := w.CardRepo.GetByNumber(request.CardNumber)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	receipt, err := w.Transaction.Attempt(&machine, &card, pin, amount)
+	receipt, err := w.Transaction.Attempt(&machine, &card, request.Pin, request.Amount)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
 	w.persist(&machine, &card)
-
 	return receipt, nil
 }
