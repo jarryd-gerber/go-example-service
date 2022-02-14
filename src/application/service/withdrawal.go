@@ -7,16 +7,19 @@ import (
 	"github.com/jarryd-gerber/go-example-service/src/domain/entity"
 	"github.com/jarryd-gerber/go-example-service/src/domain/service"
 	"github.com/jarryd-gerber/go-example-service/src/domain/valueobject"
+	"gorm.io/gorm"
 )
 
 type Withdrawal struct {
 	CardRepo    repository.Card
 	MachineRepo repository.Machine
 	Transaction service.Transaction
+	DB          *gorm.DB
 }
 
 func (w Withdrawal) persist(machine *entity.Machine, card *entity.Card) {
-	tx := w.MachineRepo.DB.Begin()
+	// Persist all entities in single transaction.
+	tx := w.DB.Begin()
 	tx.Save(machine)
 	tx.Save(card.Account)
 	tx.Commit()
@@ -28,7 +31,7 @@ func (w Withdrawal) Make(
 	pin int,
 	amount float64,
 ) (*valueobject.Receipt, error) {
-
+	// Make a withdrawal and persist on success.
 	card, err := w.CardRepo.GetByNumber(cardNumber)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)

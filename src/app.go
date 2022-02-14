@@ -4,15 +4,20 @@ import (
 	"log"
 
 	"github.com/jarryd-gerber/go-example-service/src/application"
+	"github.com/jarryd-gerber/go-example-service/src/domain/valueobject"
+	"github.com/jarryd-gerber/go-example-service/src/infrastructure"
 )
 
 func main() {
-	atmID := "lloyds777"
-	cardNumber := "0123456789"
-	pin := 1234
-	amount := 1000.00
+	request := valueobject.Request{
+		MachineID:  "lloyds777",
+		CardNumber: "0123456789",
+		Pin:        1234,
+		Amount:     1000.00,
+	}
 
-	receipt, err := application.InitWithdrawal().Make(atmID, cardNumber, pin, amount)
+	receipt, err := application.InitWithdrawal(infrastructure.InitDB()).Make(
+		request.MachineID, request.CardNumber, request.Pin, request.Amount)
 	if err != nil {
 		log.Fatal(err)
 	}

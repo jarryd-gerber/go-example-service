@@ -11,7 +11,9 @@ type Transaction struct{}
 
 const BankCharge float64 = 3.50
 
-func (t Transaction) buildReceipt(amount, charges, balance float64) *valueobject.Receipt {
+func (t Transaction) buildReceipt(
+	amount, charges, balance float64) *valueobject.Receipt {
+	// Build a receipt for a successful transaction
 	return &valueobject.Receipt{
 		Amount:  amount,
 		Charges: charges,
@@ -19,7 +21,9 @@ func (t Transaction) buildReceipt(amount, charges, balance float64) *valueobject
 	}
 }
 
-func (t Transaction) calculateCharges(machine *entity.Machine, card *entity.Card) float64 {
+func (t Transaction) calculateCharges(
+	machine *entity.Machine, card *entity.Card) float64 {
+	// Calculate if charges apply.
 	if card.Bank != machine.Bank {
 		return BankCharge
 	}
@@ -27,8 +31,10 @@ func (t Transaction) calculateCharges(machine *entity.Machine, card *entity.Card
 	return 0.00
 }
 
-func (t Transaction) Attempt(machine *entity.Machine, card *entity.Card, pin int, amount float64) (*valueobject.Receipt, error) {
-
+func (t Transaction) Attempt(
+	machine *entity.Machine, card *entity.Card, pin int, amount float64,
+) (*valueobject.Receipt, error) {
+	// Attempt to make a transaction between a Machine and Card.
 	charges := t.calculateCharges(machine, card)
 	amount += charges
 
