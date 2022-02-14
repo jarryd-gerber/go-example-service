@@ -22,8 +22,3 @@ func (repo Machine) GetByID(id string) (entity.Machine, error) {
 
 	return machine, nil
 }
-
-func (repo Machine) Update(machine *entity.Machine) {
-	// Update all values on a Machine entity.
-	repo.DB.Save(machine)
-}

@@ -22,8 +22,3 @@ func (repo Card) GetByNumber(number string) (entity.Card, error) {
 
 	return card, nil
 }
-
-func (repo Card) Update(card *entity.Card) {
-	// Update all values on a Card entity.
-	repo.DB.Save(card.Account)
-}
