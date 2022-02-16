@@ -7,14 +7,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type Card struct {
-	DB *gorm.DB
+type CardRepository struct {
+	Repository
+	db *gorm.DB
 }
 
-func (repo Card) GetByNumber(number string) (entity.Card, error) {
+func CreateCardRepository(db *gorm.DB) *CardRepository {
+	return &CardRepository{db: db}
+}
+
+func (repo CardRepository) GetByNumber(number string) (entity.Card, error) {
 	// Search for a Card entity by its number attribute.
-	card := entity.Card{}
-	result := repo.DB.Preload("Account").Find(&card)
+	card := entity.Card{Number: number}
+	result := repo.db.Preload("Account").Find(&card)
 
 	if result.Error != nil {
 		return card, fmt.Errorf("%w", result.Error)

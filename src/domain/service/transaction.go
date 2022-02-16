@@ -11,6 +11,10 @@ type Transaction struct{}
 
 const BankCharge float64 = 3.50
 
+func CreateTransaction() *Transaction {
+	return &Transaction{}
+}
+
 func (t Transaction) buildReceipt(
 	amount, charges, balance float64) *valueobject.Receipt {
 	// Build a receipt for a successful transaction

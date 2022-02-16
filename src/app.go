@@ -11,7 +11,7 @@ import (
 func main() {
 	db := infrastructure.InitDB()
 
-	receipt, err := application.InitWithdrawal(db).Make(valueobject.Request{
+	receipt, err := application.CreateWithdrawal(db).Make(valueobject.Request{
 		MachineID:  "lloyds777",
 		CardNumber: "0123456789",
 		Pin:        1234,

@@ -7,14 +7,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type Machine struct {
-	DB *gorm.DB
+type MachineRepository struct {
+	Repository
+	db *gorm.DB
 }
 
-func (repo Machine) GetByID(id string) (entity.Machine, error) {
+func CreateMachineRepository(db *gorm.DB) *MachineRepository {
+	return &MachineRepository{db: db}
+}
+
+func (repo MachineRepository) GetByID(id string) (entity.Machine, error) {
 	// Retrieve an Machine entity by ID.
 	machine := entity.Machine{}
-	result := repo.DB.First(&machine, "id = ?", id)
+	result := repo.db.First(&machine, "id = ?", id)
 
 	if result.Error != nil {
 		return machine, fmt.Errorf("%w", result.Error)
