@@ -32,6 +32,7 @@ func AttemptTransaction(
 	// Attempt to make a transaction between a Machine and Card.
 	charges := 0.00
 	deductAmount := amount
+	account := card.Account
 
 	if card.Bank != machine.Bank {
 		charges = BankCharge
@@ -42,7 +43,7 @@ func AttemptTransaction(
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	if _, err := card.Account.DeductBalance(deductAmount); err != nil {
+	if _, err := account.DeductBalance(deductAmount); err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
@@ -53,6 +54,6 @@ func AttemptTransaction(
 	return &Receipt{
 		amount:  amount,
 		charges: charges,
-		balance: card.Account.Balance,
+		balance: account.Balance,
 	}, nil
 }
