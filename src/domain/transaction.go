@@ -31,15 +31,18 @@ func AttemptTransaction(
 ) (*Receipt, error) {
 	// Attempt to make a transaction between a Machine and Card.
 	charges := 0.00
+	deductAmount := amount
+
 	if card.Bank != machine.Bank {
 		charges = BankCharge
+		deductAmount += charges
 	}
 
 	if _, err := card.VerifyPin(pin); err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	if _, err := card.Account.DeductBalance(amount); err != nil {
+	if _, err := card.Account.DeductBalance(deductAmount); err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
