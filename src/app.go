@@ -40,8 +40,8 @@ func main() {
 		amount:     1000.00,
 	}
 
-	receipt, err := application.CreateWithdrawal(db).Make(request.GetCardNumber(),
-		request.GetMachineID(), request.GetPin(), request.GetAmount())
+	receipt, err := application.CreateWithdrawal(db).Make(request.GetMachineID(),
+		request.GetCardNumber(), request.GetPin(), request.GetAmount())
 
 	if err != nil {
 		log.Fatal(err)
