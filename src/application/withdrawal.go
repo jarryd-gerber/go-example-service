@@ -23,7 +23,7 @@ func CreateWithdrawal(db *gorm.DB) Withdrawal {
 	}
 }
 
-func (wd Withdrawal) Make(
+func (wd Withdrawal) Request(
 	machineID string, cardNumber string, pin int, amount float64,
 ) (*domain.Receipt, error) {
 	// Make a withdrawal and persist on success.
