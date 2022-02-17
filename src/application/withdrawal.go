@@ -5,8 +5,6 @@ import (
 
 	"github.com/jarryd-gerber/go-example-service/src/application/repository"
 	"github.com/jarryd-gerber/go-example-service/src/domain"
-	"github.com/jarryd-gerber/go-example-service/src/domain/entity"
-	"github.com/jarryd-gerber/go-example-service/src/domain/valueobject"
 	"gorm.io/gorm"
 )
 
@@ -25,33 +23,30 @@ func CreateWithdrawal(db *gorm.DB) Withdrawal {
 	}
 }
 
-func (wd Withdrawal) Make(request valueobject.Request) (*domain.Receipt, error) {
+func (wd Withdrawal) Make(
+	machineID string, cardNumber string, pin int, amount float64,
+) (*domain.Receipt, error) {
 	// Make a withdrawal and persist on success.
-	machine, err := wd.machines.GetByID(request.MachineID)
+	machine, err := wd.machines.GetByID(machineID)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	card, err := wd.cards.GetByNumber(request.CardNumber)
+	card, err := wd.cards.GetByNumber(cardNumber)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
 	// Attempt a transaction between the card and the machine.
-	receipt, err := domain.AttemptTransaction(
-		&machine, &card, request.Pin, request.Amount)
+	receipt, err := domain.AttemptTransaction(&machine, &card, pin, amount)
 	if err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	wd.persist(&machine, &card)
-	return receipt, nil
-}
-
-func (wd Withdrawal) persist(machine *entity.Machine, card *entity.Card) {
-	// Persist all entities in single transaction.
 	tx := wd.db.Begin()
 	tx.Save(machine)
 	tx.Save(card.Account)
 	tx.Commit()
+
+	return receipt, nil
 }
