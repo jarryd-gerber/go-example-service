@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Printf("Amount withdrawn: £%.2f", receipt.Amount)
-	log.Printf("Withdrawal charges of £%.2f applies", receipt.Charges)
-	log.Printf("Available balance: £%.2f", receipt.Balance)
+	log.Printf("Amount withdrawn: £%.2f", receipt.GetAmount())
+	log.Printf("Withdrawal charges of £%.2f applies", receipt.GetCharges())
+	log.Printf("Available balance: £%.2f", receipt.GetBalance())
 }
